@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sqflite/database/dbhelper.dart';
-import 'package:flutter_sqflite/model/employee.dart';
-import 'package:flutter_sqflite/employeelist.dart';
+import 'package:flutter_sqflite/model/mahasiswa.dart';
+import 'package:flutter_sqflite/view/list_mahasiswa.dart';
 
 void main() => runApp(new MyApp());
 

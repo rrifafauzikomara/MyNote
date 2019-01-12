@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_sqflite/model/employee.dart';
+import 'package:flutter_sqflite/model/mahasiswa.dart';
 import 'dart:async';
 import 'package:flutter_sqflite/database/dbhelper.dart';
 
@@ -36,7 +36,7 @@ class MyEmployeeListPageState extends State<MyEmployeeList> {
                           new Text(snapshot.data[index].firstName,
                               style: new TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 18.0)),
-                          new Text(snapshot.data[index].lastName,
+                          new Text(snapshot.data[index].mobileNo,
                               style: new TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 14.0)),
                           new Divider()
