@@ -28,12 +28,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  Employee employee = new Employee("", "", "", "");
+  Mahasiswa mahasiswa = new Mahasiswa("", "", "", "");
 
-  String firstname;
-  String lastname;
-  String emailId;
-  String mobileno;
+  String nama;
+  String npm;
+  String kelas;
+  String jurusan;
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   final formKey = new GlobalKey<FormState>();
 
@@ -43,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return new Scaffold(
       key: scaffoldKey,
       appBar: new AppBar(
-          title: new Text('Tambah Pegawai'),
+          title: new Text('Tambah Mahasiswa'),
           actions: <Widget>[
             new IconButton(
               icon: const Icon(Icons.view_list),
@@ -62,31 +62,31 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               new TextFormField(
                 keyboardType: TextInputType.text,
-                decoration: new InputDecoration(labelText: 'Nama Awal'),
+                decoration: new InputDecoration(labelText: 'Nama Lengkap'),
                 validator: (val) =>
-                val.length == 0 ?"Masukan Nama Awak" : null,
-                onSaved: (val) => this.firstname = val,
+                val.length == 0 ?"Masukan Nama Lengkap" : null,
+                onSaved: (val) => this.nama = val,
               ),
               new TextFormField(
                 keyboardType: TextInputType.text,
-                decoration: new InputDecoration(labelText: 'Nama Akhir'),
+                decoration: new InputDecoration(labelText: 'NPM'),
                 validator: (val) =>
-                val.length ==0 ? 'Masukan Nama Akhir' : null,
-                onSaved: (val) => this.lastname = val,
+                val.length ==0 ? 'Masukan NPM' : null,
+                onSaved: (val) => this.npm = val,
               ),
               new TextFormField(
-                keyboardType: TextInputType.phone,
-                decoration: new InputDecoration(labelText: 'No Telephone'),
+                keyboardType: TextInputType.text,
+                decoration: new InputDecoration(labelText: 'Kelas'),
                 validator: (val) =>
-                val.length ==0 ? 'Masukan No Telephone' : null,
-                onSaved: (val) => this.mobileno = val,
+                val.length ==0 ? 'Masukan Kelas' : null,
+                onSaved: (val) => this.kelas = val,
               ),
               new TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: new InputDecoration(labelText: 'Alamat Email'),
+                keyboardType: TextInputType.text,
+                decoration: new InputDecoration(labelText: 'Jurusan'),
                 validator: (val) =>
-                val.length ==0 ? 'Masukan Alamat Email' : null,
-                onSaved: (val) => this.emailId = val,
+                val.length ==0 ? 'Masukan Jurusan' : null,
+                onSaved: (val) => this.jurusan = val,
               ),
               new Container(margin: const EdgeInsets.only(top: 10.0),child: new RaisedButton(onPressed: _submit,
                 child: new Text('Simpan'),),)
@@ -103,10 +103,10 @@ class _MyHomePageState extends State<MyHomePage> {
     }else{
       return null;
     }
-    var employee = Employee(firstname,lastname,mobileno,emailId);
+    var mahasiswa = Mahasiswa(nama,npm,kelas,jurusan);
     var dbHelper = DBHelper();
-    dbHelper.saveEmployee(employee);
-    _showSnackBar("Data Berhasil Tersimpan");
+    dbHelper.saveMahasiswa(mahasiswa);
+    _showSnackBar("Data Mahasiswa Berhasil Tersimpan");
   }
 
   void _showSnackBar(String text) {
@@ -117,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void navigateToEmployeeList(){
     Navigator.push(
       context,
-      new MaterialPageRoute(builder: (context) => new MyEmployeeList()),
+      new MaterialPageRoute(builder: (context) => new MyListMahasiswa()),
     );
   }
 }

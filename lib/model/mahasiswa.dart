@@ -1,10 +1,10 @@
-class Employee{
+class Mahasiswa{
 
-  String firstName;
-  String lastName;
-  String mobileNo;
-  String emailId;
+  String nama;
+  String npm;
+  String kelas;
+  String jurusan;
 
-  Employee(this.firstName, this.lastName,this.mobileNo,this.emailId);
+  Mahasiswa(this.nama, this.npm, this.kelas, this.jurusan);
 
 }

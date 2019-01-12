@@ -19,50 +19,50 @@ class DBHelper {
   //membuat database dengan nama latihan.db di direktori anda
   initDb() async {
     io.Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "test.db");
+    String path = join(documentsDirectory.path, "latihan.db");
     var theDb = await openDatabase(path, version: 1, onCreate: _onCreate);
     return theDb;
   }
 
   // Creating a table name Employee with fields
-  void _onCreate(Database db, int version) async {
+  void _onCreate(Database dbMhs, int version) async {
     // When creating the db, create the table
-    await db.execute(
-        "CREATE TABLE Employee(id INTEGER PRIMARY KEY, firstname TEXT, lastname TEXT, mobileno TEXT,emailId TEXT )");
+    await dbMhs.execute(
+        "CREATE TABLE mahasiswa(id INTEGER PRIMARY KEY, nama TEXT, npm TEXT, kelas TEXT, jurusan TEXT )");
     print("Created tables");
   }
 
   // Retrieving employees from Employee Tables
-  Future<List<Employee>> getEmployees() async {
+  Future<List<Mahasiswa>> getMahasiswa() async {
     var dbClient = await db;
-    List<Map> list = await dbClient.rawQuery('SELECT * FROM Employee');
-    List<Employee> employees = new List();
+    List<Map> list = await dbClient.rawQuery('SELECT * FROM mahasiswa');
+    List<Mahasiswa> mahasiswa = new List();
     for (int i = 0; i < list.length; i++) {
-      employees.add(new Employee(list[i]["firstname"], list[i]["lastname"], list[i]["mobileno"], list[i]["emailid"]));
+      mahasiswa.add(new Mahasiswa(list[i]["nama"], list[i]["npm"], list[i]["kelas"], list[i]["jurusan"]));
     }
-    print(employees.length);
-    return employees;
+    print(mahasiswa.length);
+    return mahasiswa;
   }
 
-  void saveEmployee(Employee employee) async {
+  void saveMahasiswa(Mahasiswa mahasiswa) async {
     var dbClient = await db;
     await dbClient.transaction((txn) async {
       return await txn.rawInsert(
-          'INSERT INTO Employee(firstname, lastname, mobileno, emailid ) VALUES(' +
+          'INSERT INTO mahasiswa(nama, npm, kelas, jurusan) VALUES(' +
               '\'' +
-              employee.firstName +
-              '\'' +
-              ',' +
-              '\'' +
-              employee.lastName +
+              mahasiswa.nama +
               '\'' +
               ',' +
               '\'' +
-              employee.mobileNo +
+              mahasiswa.npm +
               '\'' +
               ',' +
               '\'' +
-              employee.emailId +
+              mahasiswa.kelas +
+              '\'' +
+              ',' +
+              '\'' +
+              mahasiswa.jurusan +
               '\'' +
               ')');
     });
