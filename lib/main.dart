@@ -49,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: const Icon(Icons.view_list),
               tooltip: 'Next choice',
               onPressed: () {
-                navigateToEmployeeList();
+                navigateToListMahasiswa();
               },
             ),
           ]
@@ -114,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
         .showSnackBar(new SnackBar(content: new Text(text)));
   }
 
-  void navigateToEmployeeList(){
+  void navigateToListMahasiswa(){
     Navigator.push(
       context,
       new MaterialPageRoute(builder: (context) => new MyListMahasiswa()),

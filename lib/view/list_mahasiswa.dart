@@ -19,7 +19,7 @@ class MyListPageMahasiswa extends State<MyListMahasiswa> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('List Pegawai'),
+        title: new Text('List Mahasiswa'),
       ),
       body: new Container(
         padding: new EdgeInsets.all(16.0),

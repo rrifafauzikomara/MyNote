@@ -24,7 +24,7 @@ class DBHelper {
     return theDb;
   }
 
-  // Creating a table name Employee with fields
+  // membuat tabel mahasiswa dengan beberapa atribut
   void _onCreate(Database dbMhs, int version) async {
     // When creating the db, create the table
     await dbMhs.execute(
@@ -32,7 +32,7 @@ class DBHelper {
     print("Created tables");
   }
 
-  // Retrieving employees from Employee Tables
+  // mengambil data mahasiswa dari tabel mahasiswa
   Future<List<Mahasiswa>> getMahasiswa() async {
     var dbClient = await db;
     List<Map> list = await dbClient.rawQuery('SELECT * FROM mahasiswa');
@@ -44,6 +44,7 @@ class DBHelper {
     return mahasiswa;
   }
 
+  // menambahkan data mahasiswa pada tabel mahasiswa
   void saveMahasiswa(Mahasiswa mahasiswa) async {
     var dbClient = await db;
     await dbClient.transaction((txn) async {
@@ -67,6 +68,5 @@ class DBHelper {
               ')');
     });
   }
-
 
 }
