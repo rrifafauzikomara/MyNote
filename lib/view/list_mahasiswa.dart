@@ -30,17 +30,20 @@ class MyListPageMahasiswa extends State<MyListMahasiswa> {
               return new ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {
-                    return new Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          new Text(snapshot.data[index].nama,
-                              style: new TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 18.0)),
-                          new Text(snapshot.data[index].npm,
-                              style: new TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 14.0)),
-                          new Divider()
-                        ]);
+                    return new GestureDetector(
+                        child: new Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              new Text(snapshot.data[index].nama,
+                                  style: new TextStyle(
+                                      fontWeight: FontWeight.bold, fontSize: 18.0)),
+                              new Text(snapshot.data[index].npm,
+                                  style: new TextStyle(
+                                      fontWeight: FontWeight.bold, fontSize: 14.0)),
+                              new Divider()
+                            ]),
+                        onTap: () => _showDialog()
+                    );
                   });
             } else if (snapshot.hasError) {
               return new Text("${snapshot.error}");
@@ -51,4 +54,34 @@ class MyListPageMahasiswa extends State<MyListMahasiswa> {
       ),
     );
   }
+
+  void _showDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Hapus Mahasiswa"),
+          content: new Text("Apakah Anda yakin ingin menghapus data Mahasiswa ?"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("No"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text("Yes"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }
