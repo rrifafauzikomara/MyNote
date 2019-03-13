@@ -3,70 +3,72 @@ import 'dart:io' as io;
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:flutter_sqflite/model/mahasiswa.dart';
+import 'package:flutter_sqflite/model/note.dart';
 
 class DBHelper {
+  static final DBHelper _instance = DBHelper.internal();
+  DBHelper.internal();
 
+  factory DBHelper() => _instance;
   static Database _db;
 
   Future<Database> get db async {
-    if(_db != null)
-      return _db;
-    _db = await initDb();
+    if (_db != null) return _db;
+    _db = await setDB();
     return _db;
   }
 
-  //membuat database dengan nama latihan.db di direktori anda
-  initDb() async {
-    io.Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "latihan.db");
-    var theDb = await openDatabase(path, version: 1, onCreate: _onCreate);
-    return theDb;
+  setDB() async {
+    io.Directory directory = await getApplicationDocumentsDirectory();
+    String path = join(directory.path, "NoteDb");
+    var dB = await openDatabase(path, version: 1, onCreate: _onCreate);
+    return dB;
   }
 
-  // membuat tabel mahasiswa dengan beberapa atribut
-  void _onCreate(Database dbMhs, int version) async {
-    // When creating the db, create the table
-    await dbMhs.execute(
-        "CREATE TABLE mahasiswa(id INTEGER PRIMARY KEY, nama TEXT, npm TEXT, kelas TEXT, jurusan TEXT )");
-    print("Created tables");
+  void _onCreate(Database db, int version) async {
+    await db.execute(
+        "CREATE TABLE note(id INTEGER PRIMARY KEY, title TEXT, note TEXT, createDate TEXT, updateDate TEXT, sortDate TEXT)");
+    print("DB Created");
   }
 
-  // mengambil data mahasiswa dari tabel mahasiswa
-  Future<List<Mahasiswa>> getMahasiswa() async {
+  Future<int> saveNote(Note note) async {
     var dbClient = await db;
-    List<Map> list = await dbClient.rawQuery('SELECT * FROM mahasiswa');
-    List<Mahasiswa> mahasiswa = new List();
-    for (int i = 0; i < list.length; i++) {
-      mahasiswa.add(new Mahasiswa(list[i]["nama"], list[i]["npm"], list[i]["kelas"], list[i]["jurusan"]));
+    int res = await dbClient.insert("note", note.toMap());
+    print("Data Inserted");
+    return res;
+  }
+
+  Future<List<Note>> getNote() async{
+    var dbClient = await db;
+    List<Map> list = await dbClient.rawQuery("SELECT * FROM note ORDER BY sortDate DESC");
+    List<Note> notedata = new List();
+    for(int i=0; i<list.length; i++){
+      var note = Note(
+        list[i]["title"],
+        list[i]["note"],
+        list[i]["createDate"],
+        list[i]["updateDate"],
+        list[i]["sortDate"],
+      );
+      note.setNoteId(list[i]['id']);
+      notedata.add(note);
     }
-    print(mahasiswa.length);
-    return mahasiswa;
+
+    return notedata;
   }
 
-  // menambahkan data mahasiswa pada tabel mahasiswa
-  void saveMahasiswa(Mahasiswa mahasiswa) async {
+  Future<bool> updateNote(Note note) async{
     var dbClient = await db;
-    await dbClient.transaction((txn) async {
-      return await txn.rawInsert(
-          'INSERT INTO mahasiswa(nama, npm, kelas, jurusan) VALUES(' +
-              '\'' +
-              mahasiswa.nama +
-              '\'' +
-              ',' +
-              '\'' +
-              mahasiswa.npm +
-              '\'' +
-              ',' +
-              '\'' +
-              mahasiswa.kelas +
-              '\'' +
-              ',' +
-              '\'' +
-              mahasiswa.jurusan +
-              '\'' +
-              ')');
-    });
+    int res = await dbClient.update("note", note.toMap(),
+        where: "id=?",
+        whereArgs: <int>[note.id]
+    );
+    return res > 0 ? true : false;
   }
 
+  Future<int> deleteNote(Note note) async{
+    var dbClient = await db;
+    int res = await dbClient.rawDelete("DELETE FROM note WHERE id = ?", [note.id]);
+    return res;
+  }
 }
