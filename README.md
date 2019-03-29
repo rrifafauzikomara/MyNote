@@ -1,4 +1,4 @@
-# flutter_sqflite
+# My Note
 
 A new Flutter application.
 
